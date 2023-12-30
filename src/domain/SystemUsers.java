@@ -1,5 +1,7 @@
 package domain;
 
+import exceptions.UsersException;
+
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
@@ -26,7 +28,10 @@ public class SystemUsers {
         System.out.println();
     }
 
-    public void readUsers() {
+    public void readUsers() throws UsersException{
+        if (listUsers.size() == 0) {
+            throw new UsersException("Erro! não existe nenhum usuário registrado!");
+        }
         System.out.println("******* Lista *******");
         System.out.println();
         for (int i = 0; i < listUsers.size(); i++) {
@@ -39,7 +44,7 @@ public class SystemUsers {
         System.out.println();
     }
 
-    public void updateUser() {
+    public void updateUser() throws UsersException{
         try {
         readUsers();
 
@@ -67,10 +72,12 @@ public class SystemUsers {
         } catch (InputMismatchException e) {
             System.out.println("Entrada inválida!");
             sc.nextLine();
+        } catch (UsersException e) {
+            System.out.println(e.getMessage());
         }
     }   
 
-    public void deleteUser() {
+    public void deleteUser() throws UsersException{
         try {
             readUsers();
 
@@ -78,7 +85,7 @@ public class SystemUsers {
             int indice = sc.nextInt();
             sc.nextLine();
 
-            if (indice > 0 && indice >= listUsers.size()) {
+            if (indice > 0 && indice <= listUsers.size()) {
                 listUsers.remove((indice - 1));
                 System.out.println("Usuário removido com sucesso!");
             } else {
@@ -88,6 +95,8 @@ public class SystemUsers {
         } catch (InputMismatchException e) {
             System.out.println("Entrada inválida!");
             sc.nextLine();
+        } catch (UsersException e){
+            System.out.println(e.getMessage());
         }
     }
 }
